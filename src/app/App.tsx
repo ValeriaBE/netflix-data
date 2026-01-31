@@ -30,9 +30,6 @@ export default function App() {
         const rows = await loadNetflixCsv();
         if (cancelled) return;
         setData(rows);
-        console.log("Loaded rows:", rows.length);
-console.log("Sample rows:", rows.slice(0, 5));
-
         setErr(null);
       } catch (e: any) {
         console.error(e);

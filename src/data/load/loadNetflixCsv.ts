@@ -1,5 +1,5 @@
 import * as Papa from "papaparse";
-import type { RawRow, TitleDatum } from "../model/types";
+import type { TitleDatum } from "../model/types";
 
 // Helpers to survive weird CSV headers like "Country " or "Country\r"
 function getField(row: Record<string, any>, candidates: string[]) {
@@ -48,13 +48,6 @@ export async function loadNetflixCsv(): Promise<TitleDatum[]> {
     skipEmptyLines: true,
   });
 
-  // ✅ Debug once in dev: tells us exactly what the browser thinks the headers are
-  console.log("CSV headers:", parsed.meta.fields);
-
-  if (parsed.errors?.length) {
-    console.warn("CSV parse warnings:", parsed.errors.slice(0, 5));
-  }
-
   const focus = new Set(["United States", "Canada"]);
 
   const out: TitleDatum[] = [];
@@ -83,9 +76,6 @@ export async function loadNetflixCsv(): Promise<TitleDatum[]> {
       duration: String(rawDuration ?? "").trim(),
     });
   }
-
-  console.log("US+Canada rows after filter:", out.length);
-  console.log("Sample parsed row:", out[0]);
 
   return out;
 }
