@@ -1,118 +1,73 @@
-# 🎬 Netflix Title Journey
+# React + TypeScript + Vite
 
-**An Animated Exploration of U.S. vs Canada Content Strategy**
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Overview
+Currently, two official plugins are available:
 
-**Netflix Title Journey** is an interactive, animated data visualization that explores how Netflix’s content production strategy differs between the **United States** and **Canada**.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-Instead of static charts, this project uses **animated dot-based storytelling** to reveal patterns in:
+## React Compiler
 
-* content maturity (ratings),
-* genre investment,
-* and format (Movie vs TV Show),
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-allowing users to *see* how titles reorganize as the analytical lens changes.
+## Expanding the ESLint configuration
 
-This project was designed as a **decision-support visualization**, inspired by how internal product and analytics teams explore data rather than how dashboards traditionally present it.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-## ✨ Key Features
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-* **Animated “Title Journey”**
-  Each dot represents a single anonymized title and smoothly transitions between narrative states.
-
-* **Guided Story Chapters**
-  Users progress through multiple analytical lenses:
-
-  1. Overall catalog
-  2. Content maturity (ratings)
-  3. Genre distribution
-  4. Format comparison (Movie vs TV)
-
-* **Focus Toggle**
-  Instantly compare:
-
-  * United States + Canada
-  * United States only
-  * Canada only
-
-* **Interactive Tooltips**
-  Hover to inspect metadata (country, rating, genre, year, format).
-
-* **Netflix-inspired Design**
-  Dark UI, brand-aligned color palette, cinematic motion, and minimal chrome.
-
-
-## 🧠 Design Rationale
-
-### Why animation instead of charts?
-
-Traditional bar charts can obscure distributional nuance and feel static.
-This project emphasizes **motion as explanation** — titles physically regroup to show how strategy shifts under different lenses.
-
-### Why only the U.S. and Canada?
-
-The underlying dataset contains limited country coverage. Rather than presenting a misleading global map, the visualization intentionally focuses on two closely linked markets to maximize **interpretability, accuracy, and narrative clarity**.
-
-### Why anonymized titles?
-
-The dataset uses generic identifiers (e.g., “Title 1”). This project treats each title as a **unit of strategy**, not a recognizable show, allowing the analysis to focus on structural patterns rather than individual properties.
-
-
-## 🧩 Data
-
-* **Source:** Public Netflix Movies and TV Shows dataset
-* **Fields used:**
-
-  * Country
-  * Type (Movie / TV Show)
-  * Rating
-  * Genre
-  * Release Year
-  * Duration
-
-**Important:**
-Country reflects *production attribution* in the dataset — not audience reach, availability, or popularity.
-
-
-## 🛠 Tech Stack
-
-* **Frontend:** React + TypeScript (Vite)
-* **Visualization:** D3.js (`d3-force` for animated layouts)
-* **State Management:** Zustand
-* **Styling:** Custom CSS + centralized theme system
-* **Data Parsing:** PapaParse
-
-
-## 🧱 Project Structure
-
-```
-src/
-├─ app/                # app shell, constants, high-level wiring
-├─ data/
-│  ├─ load/            # CSV loading & parsing
-│  ├─ model/           # typed data models
-│  └─ derive/          # (future) computed insights
-├─ state/              # story & focus state
-├─ components/
-│  ├─ layout/          # shell, header, side panel
-│  ├─ ui/              # buttons, segmented controls
-│  └─ viz/
-│     └─ TitleJourney/ # animated dot system + layouts
-├─ styles/             # Netflix-inspired theme + globals
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-## 🔍 What This Project Demonstrates
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-* Interactive data storytelling beyond static charts
-* Animation as an analytical tool
-* Engineering judgment around data limitations
-* Separation of data, state, and rendering layers
-* Production-minded visualization design
-
-## 📄 Disclaimer
-
-This project is an independent portfolio piece and is **not affiliated with or endorsed by Netflix**.
-All data is derived from public sources and used for educational and exploratory purposes only.
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
